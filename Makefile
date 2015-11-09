@@ -13,4 +13,4 @@ siesta: siesta.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	$(RM) $(TARGET) siesta
+	$(RM) $(TARGETS)
