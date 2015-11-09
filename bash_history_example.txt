@@ -1,0 +1,41 @@
+% ls
+% pwd
+% set history = 10    # set bash's history to 10 just for our testing
+
+% ls                  # run some commands
+% pwd
+%  la  -l -a
+% whomai
+whomai: Command not found.
+% whoami
+% pwd
+
+% history             # run the history command to see the last 10 commands
+     4	20:24	ls
+     5	20:24	pwd
+     6	20:24	set history = 10
+     7	20:24	ls
+     8	20:24	pwd
+     9	20:24	ls -l -a
+    10	20:24	whomai
+    11	20:24	whoami
+    12	20:25	pwd
+    13	20:25	history
+
+% !7                    # run command 7 from history (ls)
+% !7                    # run command 7 from history (ls)
+
+% history
+     7	20:24	ls
+     8	20:24	pwd
+     9	20:24	ls -l -a
+    10	20:24	whomai
+    11	20:24	whoami
+    12	20:25	pwd
+    13	20:25	history
+    14	20:25	ls        # the ls command from !7
+    15	20:25	ls        # the ls command from !7
+    16	20:25	history
+
+% !4                    # try to run command 4 from history 
+4: Event not found.     # no command 4 in history list anymore

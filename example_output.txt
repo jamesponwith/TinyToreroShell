@@ -1,0 +1,121 @@
+ttsh> ls
+Makefile        history_queue.c history_queue.h parse_args.c    parse_args.h
+parse_args.o    siesta.c        test.c          ttsh.c
+
+ttsh> ls -l -a
+total 84
+drwx------ 2 sat staff  4096 Nov 10 20:42 .
+drwx------ 4 sat staff  4096 Nov 10 20:16 ..
+...
+
+ttsh> whoami
+sat
+
+ttsh> ./siesta &
+
+ttsh> ./siesta &
+
+ttsh> ./siesta 10 &
+
+ttsh> ps w
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash 
+21553 pts/8    S+     0:00 ./ttsh
+21594 pts/8    S+     0:00 ./siesta      # background job
+21596 pts/8    S+     0:00 ./siesta      # background job
+21606 pts/8    S+     0:00 ./siesta 10   # background job
+21616 pts/8    R+     0:00 ps w
+
+ttsh> ./siesta 20 &
+
+ttsh> ps w
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash
+21553 pts/8    S+     0:00 ./ttsh
+21606 pts/8    S+     0:00 ./siesta 10    # background job (previous one exited)
+21626 pts/8    S+     0:00 ./siesta 20    # background job
+21627 pts/8    R+     0:00 ps w
+
+ttsh> blah
+blah: command not found
+
+ttsh> ps w
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash 
+21553 pts/8    S+     0:00 ./ttsh
+21626 pts/8    S+     0:00 ./siesta 20    # background job (sleeper 10& exited)
+21666 pts/8    R+     0:00 ps w
+
+ttsh> history
+     2  whoami
+     3  ./siesta &
+     4  ./siesta &
+     5  ./siesta 10 &
+     6  ps w
+     7  ./siesta 20 &
+     8  ps w
+     9  blah
+    10  ps w
+    11  history
+
+ttsh> !4
+
+ttsh> !10
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash 
+21553 pts/8    S+     0:00 ./ttsh
+21626 pts/8    S+     0:00 ./siesta 20
+21686 pts/8    S+     0:00 ./siesta
+21687 pts/8    R+     0:00 ps w
+
+ttsh> !10
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash
+21553 pts/8    S+     0:00 ./ttsh
+21717 pts/8    R+     0:00 ps w
+
+ttsh> history
+     6  ps w
+     7  ./siesta 20 &
+     8  ps w
+     9  blah
+    10  ps w
+    11  history
+    12  ./siesta &
+    13  ps w
+    14  ps w
+    15  history
+
+ttsh> !3
+!3: not found
+
+ttsh> !12
+
+ttsh> !13
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash
+21553 pts/8    S+     0:00 ./ttsh
+21748 pts/8    S+     0:00 ./siesta
+21758 pts/8    R+     0:00 ps w
+
+ttsh> history
+     9  blah
+    10  ps w
+    11  history
+    12  ./siesta &
+    13  ps w
+    14  ps w
+    15  history
+    16  ./siesta &
+    17  ps w
+    18  history
+
+ttsh> ps w
+  PID TTY      STAT   TIME COMMAND
+12174 pts/3    Ss     0:00 bash
+21553 pts/8    S+     0:00 ./ttsh
+21748 pts/8    S+     0:00 ./siesta
+21768 pts/8    R+     0:00 ps w
+
+ttsh> exit
+Fare thee well, friend!
