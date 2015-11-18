@@ -34,6 +34,6 @@
  *                             to run the command in the background
  *             zero (false) for a foreground command foreground
  */
-int parseArguments(char *line, char **argv);
+int parseArguments(const char * const line, char **argv);
 
 #endif
