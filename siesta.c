@@ -20,9 +20,13 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
+	pid_t my_pid = getpid();
+
+	printf("pid = %d is going to have a siesta!\n", my_pid);
 	for(int i = 0; i < num; i++) {
 		sleep(2);     
 	}
+	printf("pid = %d woke up. Time for a fiesta!\n", my_pid);
 
 	return 0;
 }
