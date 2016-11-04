@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -Werror
+CFLAGS = -g -Wall -Wextra -Werror -std=c11
 TARGETS = ttsh siesta
 
 TTSH_SRC = ttsh.c history_queue.c
