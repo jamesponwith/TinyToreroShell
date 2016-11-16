@@ -17,14 +17,14 @@
 // TODO: add your function prototypes here as necessary
 
 
-int main( ){ 
+int main(){ 
 
 	char cmdline[MAXLINE];
 	char *argv[MAXARGS];
 	int bg;
 
-	// TODO: add a call to signal to register your signal handler on 
-	//       SIGCHLD here
+	// TODO: Add a call to sigaction to register your SIGCHLD signal handler
+	// here. See the write-up for more details on sigaction.
 
 	while(1) {
 		// (1) print the shell prompt
@@ -32,9 +32,10 @@ int main( ){
 		fflush(stdout);
 
 		// (2) read in the next command entered by the user
-		if ((fgets(cmdline, MAXLINE, stdin) == NULL) 
+		if ((fgets(cmdline, MAXLINE, stdin) == NULL)
 				&& ferror(stdin)) {
-			perror("fgets error");
+			clearerr(stdin);
+			continue;
 		}
 
 		if (feof(stdin)) { /* End of file (ctrl-d) */
