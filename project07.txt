@@ -1,4 +1,4 @@
-COMP 280 - Project 06 (Tiny Torero Shell)
+COMP 280 - Project 07 (Tiny Torero Shell)
 
 1. Authors:
 
