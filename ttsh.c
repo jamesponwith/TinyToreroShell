@@ -3,6 +3,9 @@
  *
  * Add your top-level comments here.
  */
+
+#define _XOPEN_SOURCE 600
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -17,7 +20,7 @@
 // TODO: add your function prototypes here as necessary
 
 
-int main(){ 
+int main() { 
 
 	char cmdline[MAXLINE];
 	char *argv[MAXARGS];
