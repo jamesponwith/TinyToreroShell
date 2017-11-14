@@ -4,6 +4,7 @@
  * Add your top-level comments here.
  */
 
+// NOTE: all new includes should go after the following #define
 #define _XOPEN_SOURCE 600
 
 #include <stdlib.h>
