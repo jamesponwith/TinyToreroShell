@@ -1,7 +1,8 @@
 /*
  * The Tiny Torero Shell (TTSH)
  *
- * Add your top-level comments here.
+ * Hamez Rodriguez y Smeagol
+ *
  */
 
 // NOTE: all new includes should go after the following #define
