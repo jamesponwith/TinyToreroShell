@@ -20,6 +20,7 @@
 
 
 // TODO: add your function prototypes here as necessary
+void execCmd(char *argv[]); 
 
 
 int main() { 
@@ -59,11 +60,27 @@ int main() {
 		// TODO: complete top-level steps
 		// (3) make a call to parseArguments function to parse it into its argv
 		// format
+		int ret;
 		char *argv[MAXARGS];
+		ret = parseArguments(cmdline, argv);
+		if (ret != 0) {
+			printf("something went wrong");
+		}
+		execCmd(argv);
 
 		// (4) Call a function that will determine how to execute the command
 		// that the user entered, and then execute it
 	}
 
 	return 0;
+}
+
+/**
+ * Execute commands in argv
+ */
+void execCmd(char *argv[]) {
+	if (strcmp(argv[0], "exit") == 0) {
+		printf("adios...");
+		exit(0);
+	}
 }
