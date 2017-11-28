@@ -12,15 +12,13 @@
  * A struct to keep information one command in the history of 
  * command executed
  */
-struct HistoryEntry {              
+typedef struct {              
     unsigned int cmd_num;
     char cmdline[MAXLINE]; // command line for this process
-};
+} HistoryEntry;
 
-// You can use "HistoryEntry" instead of "struct HistoryEntry"
-typedef struct HistoryEntry HistoryEntry;
+int histSize();
+void addEntry(char new_cmd[MAXLINE]);
 
-
-// TODO: fill in prototypes like you did for circqueue.h in lab session 10
 
 #endif
