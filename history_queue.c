@@ -44,7 +44,3 @@ void addEntry(char new_cmd[MAXLINE]) {
 		history[rear].cmd_num = cmd_count;
 	}
 }
-
-void removeEntry() {
-	
-}
