@@ -24,32 +24,23 @@ static HistoryEntry history[MAXHIST];
 //       They should be static so that only functions in this file can
 //       access them.
 
-static int size = 0;
+//static int size = 0;
 static int front = 0;
-static int back = 0;
+static int rear = 0;
 static int cmd_count = 0;
 
 // TODO: implement your history queue functions here
 
-int histSize() {
-	return size;
-}
-
 void addEntry(char new_cmd[MAXLINE]) {
-	if (size == 0) {
-		// add first entry
-		memcpy(history[back].cmdline, new_cmd, sizeof(char[MAXLINE]));
-		history[back].cmd_num = cmd_count;
-		size++;
+	if (rear < MAXHIST - 1) {
+		rear++;
+		strcpy(history[rear].cmdline, new_cmd);
+		history[rear].cmd_num = cmd_count;
 	}
-	else if (size < MAXHIST - 1) {
-		back++;
-		cmd_count++;
-		size++;
-		memcpy(history[back].cmdline, new_cmd, sizeof(char[MAXLINE]));
-		history[back].cmd_num = cmd_count;
-	}
-	else if (size == MAXHIST) {
-
+	else if (rear == MAXHIST - 1) {
+		rear = 1;
+		front++;
+		strcpy(history[rear].cmdline, new_cmd);
+		history[rear].cmd_num = cmd_count;
 	}
 }
