@@ -82,7 +82,7 @@ int main() {
  */
 void execCmd(char *argv[]) {
 	if (strcmp(argv[0], "exit") == 0) {
-		printf("adios...\n");
+		fprintf(stdout, "adios...\n");
 		exit(0);
 		//return 0;
 	}
