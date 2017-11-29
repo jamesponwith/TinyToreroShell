@@ -21,6 +21,8 @@
 
 // TODO: add your function prototypes here as necessary
 void execCmd(char *argv[]); 
+void cd(char *argv[]); 
+
 
 
 int main() { 
@@ -81,6 +83,32 @@ void execCmd(char *argv[]) {
 	if (strcmp(argv[0], "exit") == 0) {
 		printf("adios...\n");
 		exit(0);
+		//return 0;
 	}
+	/*(
+	if (strcmp(argv[0], "history") == 0) {
+		printf("history...\n");
+		history(0);
+	}
+	*/
+	if (strcmp(argv[0], "ec") == 0) {
+		cd(argv);
+		return;
+	}
+}
 
+/**
+ * Execute cd command
+ */
+void cd(char *argv[]) {
+	char cmdline[MAXLINE];
+  	//getenv(cmdline);
+	if (argv[1] == NULL) {
+		chdir(getenv(cmdline));
+		return;
+	}
+	else if (strcmp(argv[1], "..")) {
+		chdir(cmdline);
+		return;
+	}
 }
