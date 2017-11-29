@@ -19,6 +19,6 @@ typedef struct {
 
 int histSize();
 void addEntry(char new_cmd[MAXLINE]);
-
+void removeEntry();
 
 #endif

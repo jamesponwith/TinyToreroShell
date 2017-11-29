@@ -71,6 +71,7 @@ int main() {
 		// (4) Call a function that will determine how to execute the command
 		// that the user entered, and then execute it
 		execCmd(argv);
+		//historyCmd(argv);
 	}
 
 	return 0;
@@ -112,3 +113,11 @@ void cd(char *argv[]) {
 		return;
 	}
 }
+
+/*
+void historyCmd(char *argv[], char cmdline) {
+	if(strcmp(argv[0], "history") == 0) {
+		fprintf(stdout, "%s\n", cmdline);
+	}
+}
+*/
