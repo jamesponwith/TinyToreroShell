@@ -1,7 +1,9 @@
 /*
  * The Tiny Torero Shell (TTSH)
  *
- * Add your top-level comments here.
+ * This class sets up a data structure to
+ * represent a circular queue which will 
+ * be used to store the history of commands.
  */
 
 #include <stdlib.h>
