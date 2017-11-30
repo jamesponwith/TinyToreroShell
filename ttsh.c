@@ -64,6 +64,8 @@ int main() {
 		// format
 		char *argv[MAXARGS];
 		int ret = parseArguments(cmdline, argv);
+		addEntry(cmdline);	
+
 		if (ret != 0) {
 			printf("something went wrong");
 		}
@@ -73,7 +75,6 @@ int main() {
 		execCmd(argv);
 		//historyCmd(argv);
 	}
-
 	return 0;
 }
 
@@ -86,16 +87,16 @@ void execCmd(char *argv[]) {
 		exit(0);
 		//return 0;
 	}
-	/*(
-	if (strcmp(argv[0], "history") == 0) {
-		printf("history...\n");
-		history(0);
+	else if(strcmp(argv[0], "history") == 0) {
+		
 	}
-	*/
+
+	/*
 	if (strcmp(argv[0], "cd") == 0) {
 		cd(argv);
 		return;
 	}
+	*/
 }
 
 /**
@@ -113,11 +114,3 @@ void cd(char *argv[]) {
 		return;
 	}
 }
-
-/*
-void historyCmd(char *argv[], char cmdline) {
-	if(strcmp(argv[0], "history") == 0) {
-		fprintf(stdout, "%s\n", cmdline);
-	}
-}
-*/
