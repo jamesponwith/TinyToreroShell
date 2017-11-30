@@ -37,12 +37,12 @@ void addEntry(char new_cmd[MAXLINE]) {
 		// full
 		strcpy(history[rear].cmdline, new_cmd);
 		history[rear].cmd_num = cmd_count;
-		// increment rear
-		if (rear == MAXHIST - 1) {
+
+		if (rear == MAXHIST - 1) { // if rear is at the last spot in array
 			rear = 0;
 			front++;
 		}
-		else if (rear == MAXHIST - 2) {
+		else if (rear == MAXHIST - 2) { // if front is at last spot in array
 			rear++;
 			front = 0;
 		}
@@ -52,7 +52,7 @@ void addEntry(char new_cmd[MAXLINE]) {
 		}
 	}
 	else {
-		// not full
+		// not full; add normally
 		strcpy(history[rear + 1].cmdline, new_cmd);
 		history[rear + 1].cmd_num = cmd_count;
 		if (rear == MAXHIST - 1) {
@@ -66,9 +66,18 @@ void addEntry(char new_cmd[MAXLINE]) {
 }
 
 void printHistory() {
+	int j = front;
+	for (int i = 0; i < MAXHIST; i++) { // loop through MAXHIST number of times
+		if (strcmp("", history[j].cmdline) != 0) {
+			fprintf(stdout, "%u\t%s", history[j].cmd_num, history[j].cmdline);
+		}
+		(j == MAXHIST) ? j = 0: j++;
+	}
+	/*
 	for (int i = 0; i < MAXHIST; i++) {
 		if (strcmp("", history[i].cmdline) != 0) {
 			fprintf(stdout, "%u\t%s", history[i].cmd_num, history[i].cmdline);
 		}
 	}
+	*/
 }
