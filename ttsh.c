@@ -57,7 +57,7 @@ int main() {
 		}
 
 		// TODO: remove this line after you are done testing/debugging.
-		fprintf(stdout, "DEBUG: %s\n", cmdline);
+		//fprintf(stdout, "DEBUG: %s\n", cmdline);
 
 		// TODO: complete top-level steps
 		// (3) make a call to parseArguments function to parse it into its argv
@@ -88,7 +88,7 @@ void execCmd(char *argv[]) {
 		//return 0;
 	}
 	else if(strcmp(argv[0], "history") == 0) {
-		
+		printHistory();
 	}
 
 	/*
