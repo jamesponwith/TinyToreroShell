@@ -64,6 +64,7 @@ int main() {
 		// format
 		char *argv[MAXARGS];
 		int ret = parseArguments(cmdline, argv);
+
 		addEntry(cmdline);	
 
 		if (ret != 0) {
@@ -90,7 +91,6 @@ void execCmd(char *argv[]) {
 	else if(strcmp(argv[0], "history") == 0) {
 		printHistory();
 	}
-
 	/*
 	if (strcmp(argv[0], "cd") == 0) {
 		cd(argv);

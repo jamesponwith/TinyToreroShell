@@ -56,11 +56,4 @@ void printHistory() {
 			j = 0;
 		}
 	}
-	/*
-	for (int i = 0; i < MAXHIST; i++) {
-		if (strcmp("", history[i].cmdline) != 0) {
-			fprintf(stdout, "%u\t%s", history[i].cmd_num, history[i].cmdline);
-		}
-	}
-	*/
 }
