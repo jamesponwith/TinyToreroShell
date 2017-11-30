@@ -66,14 +66,9 @@ void addEntry(char new_cmd[MAXLINE]) {
 }
 
 void printHistory() {
-	int j = front;
 	for (int i = 0; i < MAXHIST; i++) {
-		if (j == MAXHIST) {
-			j = 0;
+		if (strcmp("", history[i].cmdline) != 0) {
+			fprintf(stdout, "%u\t%s", history[i].cmd_num, history[i].cmdline);
 		}
-		if (strcmp("", history[j].cmdline) != 0) {
-			fprintf(stdout, "%u\t%s", history[j].cmd_num, history[j].cmdline);
-		}
-		j++;
 	}
 }
