@@ -92,7 +92,7 @@ void execCmd(char *argv[]) {
 		history(0);
 	}
 	*/
-	if (strcmp(argv[0], "ec") == 0) {
+	if (strcmp(argv[0], "cd") == 0) {
 		cd(argv);
 		return;
 	}

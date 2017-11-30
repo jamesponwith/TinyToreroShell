@@ -25,22 +25,40 @@ static HistoryEntry history[MAXHIST];
 //       access them.
 
 //static int size = 0;
-static int front = 0;
-static int rear = 0;
+static int front = -1;
+static int rear = -1;
 static int cmd_count = 0;
 
 // TODO: implement your history queue functions here
 
 void addEntry(char new_cmd[MAXLINE]) {
-	if (rear < MAXHIST - 1) {
-		rear++;
+	if (( rear == MAXHIST - 1 && front == 0) || (front = rear + 1)) {
+		// full
 		strcpy(history[rear].cmdline, new_cmd);
 		history[rear].cmd_num = cmd_count;
+		// increment rear
+		if (rear == MAXHIST - 1) {
+			rear = 0;
+			front++;
+		}
+		else if (rear == MAXHIST - 2) {
+			rear++;
+			front = 0;
+		}
+		else {
+			rear++;
+			front++;
+		}
 	}
-	else if (rear == MAXHIST - 1) {
-		rear = 1;
-		front++;
-		strcpy(history[rear].cmdline, new_cmd);
-		history[rear].cmd_num = cmd_count;
+	else {
+		// not full
+		strcpy(history[rear + 1].cmdline, new_cmd);
+		history[rear + 1].cmd_num = cmd_count;
+		if (rear == MAXHIST - 1) {
+			rear = 0;
+		}
+		else {
+			rear++;
+		}
 	}
 }
