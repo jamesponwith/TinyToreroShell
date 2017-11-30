@@ -17,6 +17,7 @@
 
 #include "parse_args.h"
 #include "history_queue.h"
+//#include "fork.h"
 
 
 // TODO: add your function prototypes here as necessary
@@ -63,6 +64,11 @@ int main() {
 		// (3) make a call to parseArguments function to parse it into its argv
 		// format
 		char *argv[MAXARGS];
+
+		if (argv[0] == NULL) {
+			continue;
+		}
+
 		int ret = parseArguments(cmdline, argv);
 
 		addEntry(cmdline);	
@@ -91,12 +97,10 @@ void execCmd(char *argv[]) {
 	else if(strcmp(argv[0], "history") == 0) {
 		printHistory();
 	}
-	/*
-	if (strcmp(argv[0], "cd") == 0) {
-		cd(argv);
-		return;
+	else {
+		
 	}
-	*/
+	// fork and wait
 }
 
 /**
