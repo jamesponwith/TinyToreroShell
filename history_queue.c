@@ -15,8 +15,8 @@
 // global variables: add only globals for history list state
 //                   all other variables should be allocated on the stack
 // static: means these variables are only in scope in this .c module
-static HistoryEntry history[MAXHIST]; 
 
+static HistoryEntry history[MAXHIST]; 
 
 // Look at your lab 10 implementation of a circular queue of integers and
 // reuse liberally.
@@ -26,7 +26,6 @@ static HistoryEntry history[MAXHIST];
 //       They should be static so that only functions in this file can
 //       access them.
 
-//static int size = 0;
 static int front = 0;
 static int rear = 0;
 static int cmd_count = 0;
@@ -34,7 +33,7 @@ static int cmd_count = 0;
 // TODO: implement your history queue functions here
 
 void addEntry(char new_cmd[MAXLINE]) {
-	if (( rear == MAXHIST - 1 && front == 0) || (front = rear + 1)) {
+	if ((rear == MAXHIST - 1 && front == 0) || (front = rear + 1)) {
 		// full
 		strcpy(history[rear].cmdline, new_cmd);
 		history[rear].cmd_num = cmd_count;
@@ -63,21 +62,18 @@ void addEntry(char new_cmd[MAXLINE]) {
 			rear++;
 		}
 	}
-}
-
-int getFront() {
-	return front;
+	cmd_count++;
 }
 
 void printHistory() {
-	int j = getFront();
+	int j = front;
 	for (int i = 0; i < MAXHIST; i++) {
 		if (j == MAXHIST) {
 			j = 0;
 		}
-		fprintf(stdout, "\n%u\t%s\n", history[j].cmd_num, history[j].cmdline);
+		if (strcmp("", history[i].cmdline) != 0) {
+			fprintf(stdout, "%u\t%s", history[i].cmd_num, history[i].cmdline);
+		}
 		j++;
 	}
 }
-
-
