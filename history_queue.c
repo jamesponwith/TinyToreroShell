@@ -27,8 +27,8 @@ static HistoryEntry history[MAXHIST];
 //       access them.
 
 //static int size = 0;
-static int front = -1;
-static int rear = -1;
+static int front = 0;
+static int rear = 0;
 static int cmd_count = 0;
 
 // TODO: implement your history queue functions here
@@ -64,3 +64,20 @@ void addEntry(char new_cmd[MAXLINE]) {
 		}
 	}
 }
+
+int getFront() {
+	return front;
+}
+
+void printHistory() {
+	int j = getFront();
+	for (int i = 0; i < MAXHIST; i++) {
+		if (j == MAXHIST) {
+			j = 0;
+		}
+		fprintf(stdout, "\n%u\t%s\n", history[j].cmd_num, history[j].cmdline);
+		j++;
+	}
+}
+
+
