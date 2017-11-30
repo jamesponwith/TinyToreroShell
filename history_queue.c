@@ -33,36 +33,16 @@ static int cmd_count = 0;
 // TODO: implement your history queue functions here
 
 void addEntry(char new_cmd[MAXLINE]) {
-	if ((rear == MAXHIST - 1 && front == 0) || (front = rear + 1)) {
-		// full
-		strcpy(history[rear].cmdline, new_cmd);
-		history[rear].cmd_num = cmd_count;
-
-		if (rear == MAXHIST - 1) { // if rear is at the last spot in array
-			rear = 0;
-			front++;
-		}
-		else if (rear == MAXHIST - 2) { // if front is at last spot in array
-			rear++;
-			front = 0;
-		}
-		else {
-			rear++;
-			front++;
-		}
-	}
-	else {
-		// not full; add normally
-		strcpy(history[rear + 1].cmdline, new_cmd);
-		history[rear + 1].cmd_num = cmd_count;
-		if (rear == MAXHIST - 1) {
-			rear = 0;
-		}
-		else {
-			rear++;
-		}
-	}
 	cmd_count++;
+
+	strcpy(history[rear].cmdline, new_cmd);
+	history[rear].cmd_num = cmd_count;
+
+	rear = (rear + 1) % MAXHIST;
+
+	if (cmd_count > MAXHIST) {
+		front = (front + 1) % MAXHIST;				
+	}
 }
 
 void printHistory() {
@@ -71,7 +51,10 @@ void printHistory() {
 		if (strcmp("", history[j].cmdline) != 0) {
 			fprintf(stdout, "%u\t%s", history[j].cmd_num, history[j].cmdline);
 		}
-		(j == MAXHIST) ? j = 0: j++;
+		j++;
+		if (j == MAXHIST) {
+			j = 0;
+		}
 	}
 	/*
 	for (int i = 0; i < MAXHIST; i++) {
