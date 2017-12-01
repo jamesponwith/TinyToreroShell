@@ -14,17 +14,17 @@
 #include <unistd.h>
 #include <sys/types.h> 
 #include <sys/wait.h>
+#include <sys/errno.h>
 
 #include "parse_args.h"
 #include "history_queue.h"
-#include "fork.h"
 
 
 // TODO: add your function prototypes here as necessary
 void execCmd(char *argv[], int ret); 
 void cd(char *argv[]); 
-
-
+void unix_error(char*msg);
+pid_t Fork(void); 
 
 int main() { 
 	// TODO: Add a call to sigaction to register your SIGCHLD signal handler
@@ -58,7 +58,7 @@ int main() {
 		}
 
 		// TODO: remove this line after you are done testing/debugging.
-		fprintf(stdout, "DEBUG: %s\n", cmdline);
+		//fprintf(stdout, "DEBUG: %s\n", cmdline);
 
 		// TODO: complete top-level steps
 		// (3) make a call to parseArguments function to parse it into its argv
@@ -123,4 +123,16 @@ void cd(char *argv[]) {
 		chdir(cmdline);
 		return;
 	}
+}
+
+void unix_error(char *msg) {
+	fprintf(stderr, "%s: %s\n", msg, strerror(errno));
+	exit(0);
+}
+
+pid_t Fork(void) {
+	pid_t pid;
+	if ((pid = fork()) < 0)
+		unix_error("Fork error");
+	return pid;
 }
