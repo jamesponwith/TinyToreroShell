@@ -21,7 +21,7 @@
 
 
 // TODO: add your function prototypes here as necessary
-void execCmd(char *argv[]); 
+void execCmd(char *argv[], int ret); 
 void cd(char *argv[]); 
 
 
@@ -72,20 +72,11 @@ int main() {
 			continue;
 		}
 
-		if (ret == 0) {
-			// run in background
-			ret++;
-		}
-		else {
-			// run in foreground
-			ret++;
-		}
-
 		addEntry(cmdline);	
 
 		// (4) Call a function that will determine how to execute the command
 		// that the user entered, and then execute it
-		execCmd(argv);
+		execCmd(argv, ret);
 		//historyCmd(argv);
 	}
 	return 0;
@@ -94,7 +85,7 @@ int main() {
 /**
  * Execute commands in argv
  */
-void execCmd(char *argv[]) {
+void execCmd(char *argv[], int ret) {
 	if (strcmp(argv[0], "exit") == 0) {
 		fprintf(stdout, "adios...\n");
 		exit(0);
@@ -104,20 +95,18 @@ void execCmd(char *argv[]) {
 		printHistory();
 		return;
 	}
-	/*
 	else {
 		int status;
-		pid_t pid;
-		pid = Fork();
-		if (pid != 0) { // Child
-			printf("in chile");
+		pid_t child_pid; 
+
+		if ((child_pid = Fork()) == 0) { // Child
 			execvp(argv[0], argv);
 		}
 		else {
 			waitpid(-1, &status, 0);
 		}
 	}
-	*/
+	ret++;
 }
 
 /**
