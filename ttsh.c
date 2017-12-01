@@ -17,7 +17,7 @@
 
 #include "parse_args.h"
 #include "history_queue.h"
-//#include "fork.h"
+#include "fork.h"
 
 
 // TODO: add your function prototypes here as necessary
@@ -98,9 +98,12 @@ void execCmd(char *argv[]) {
 		printHistory();
 	}
 	else {
-		
+		if (Fork() == 0) {
+
+		}
+		// fork and wait
+				
 	}
-	// fork and wait
 }
 
 /**
