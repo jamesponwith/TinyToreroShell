@@ -25,11 +25,15 @@ void execCmd(char *argv[], int ret);
 void cd(char *argv[]); 
 void unix_error(char*msg);
 pid_t Fork(void); 
-int argv_size(char *argv[]); 
+void child_handler(__attribute__ ((unused)) int sig);
 
 int main() { 
 	// TODO: Add a call to sigaction to register your SIGCHLD signal handler
 	// here. See the write-up for more details on sigaction.
+	struct sigaction sa;
+	sa.sa_handler = child_handler;
+	sa.sa_flags = SA_NOCLDSTOP;
+	sigaction(SIGCHLD, &sa, NULL);
 
 	while(1) {
 		// (1) print the shell prompt
@@ -140,10 +144,6 @@ pid_t Fork(void) {
 	return pid;
 }
 
-int argv_size(char *argv[]) {
-	int counter = 0;
-	while(argv[counter] != NULL) {
-		counter++;
-	}
-	return counter;
+void child_handler(__attribute__ ((unused)) int sig) {
+	
 }
