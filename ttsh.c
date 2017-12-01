@@ -81,12 +81,11 @@ int main() {
 		// (4) Call a function that will determine how to execute the command
 		// that the user entered, and then execute it
 		execCmd(argv, ret);
-		//historyCmd(argv);
 	}
 	return 0;
 }
 
-/**
+/*
  * Execute commands in argv
  */
 void execCmd(char *argv[], int ret) {
@@ -98,24 +97,22 @@ void execCmd(char *argv[], int ret) {
 		printHistory();
 		return;
 	}
-	else if(ret == 1) {
-		fprintf(stdout,"%s\n", "Background");
-		child_handler(ret);
-	}
 	else {
 		int status;
-		pid_t child_pid; 
+		pid_t child_pid; 		
 		if ((child_pid = Fork()) == 0) { // Child
 			if (execvp(argv[0], argv) == -1) {
-				fprintf(stdout, "command does not exist\n");
+				fprintf(stdout, "command no es aqui\n");
 				exit(0);
 			}
 		}
 		else {
-			waitpid(-1, &status, 0);
+			if (ret == 0) { // background
+				waitpid(child_pid, &status, 0);
+			}
+			return;
 		}
 	}
-	ret++; // ret returns 0 prior to this and 1 after
 }
 
 /**
@@ -148,9 +145,6 @@ void unix_error(char *msg) {
 }
 
 /*
- *
- *
- *
  */
 pid_t Fork(void) {
 	pid_t pid;
@@ -160,9 +154,6 @@ pid_t Fork(void) {
 }
 
 /*
- *
- *
- *
  */
 void child_handler(__attribute__ ((unused)) int sig) {
 	pid_t pid;
