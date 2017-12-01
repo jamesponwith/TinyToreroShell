@@ -102,7 +102,7 @@ void execCmd(char *argv[], int ret) {
 			int e = execvp(argv[0], argv);
 			if (e == -1) {
 				fprintf(stdout, "command does not exist\n");
-				return;
+				exit(0);
 			}
 		}
 		else {
