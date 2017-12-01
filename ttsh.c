@@ -65,7 +65,6 @@ int main() {
 		// format
 		char *argv[MAXARGS];
 
-
 		int ret = parseArguments(cmdline, argv);
 
 		if (argv[0] == NULL) {
@@ -100,7 +99,11 @@ void execCmd(char *argv[], int ret) {
 		pid_t child_pid; 
 
 		if ((child_pid = Fork()) == 0) { // Child
-			execvp(argv[0], argv);
+			int e = execvp(argv[0], argv);
+			if (e == -1) {
+				fprintf(stdout, "command does not exist\n");
+				return;
+			}
 		}
 		else {
 			waitpid(-1, &status, 0);
