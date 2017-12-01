@@ -99,8 +99,7 @@ void execCmd(char *argv[], int ret) {
 		pid_t child_pid; 
 
 		if ((child_pid = Fork()) == 0) { // Child
-			int e = execvp(argv[0], argv);
-			if (e == -1) {
+			if (execvp(argv[0], argv) == -1) {
 				fprintf(stdout, "command does not exist\n");
 				exit(0);
 			}
