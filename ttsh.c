@@ -145,7 +145,9 @@ pid_t Fork(void) {
 }
 
 void child_handler(__attribute__ ((unused)) int sig) {
-	int saved_errno = errno;
-	while(waitpid((pid_t)(-1), 0, WNOHANG) > 0) {}
-	errno = saved_errno;	
+	pid_t pid;
+	int status;
+	while((waitpid(pid, &status, 0)) != -1) {
+		//handle death of pid, pid
+	}
 }
