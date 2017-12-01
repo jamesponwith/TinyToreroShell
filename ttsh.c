@@ -100,11 +100,11 @@ void execCmd(char *argv[], int ret) {
 	}
 	else if(ret == 1) {
 		fprintf(stdout,"%s\n", "Background");
+		child_handler(ret);
 	}
 	else {
 		int status;
 		pid_t child_pid; 
-		printf("%d\n", ret);
 		if ((child_pid = Fork()) == 0) { // Child
 			if (execvp(argv[0], argv) == -1) {
 				fprintf(stdout, "command does not exist\n");
