@@ -1,11 +1,12 @@
 COMP 280 - Project 06 (Tiny Torero Shell)
 
-1. Authors:
+1. Authors: James Ponwith and Patrick Hall
 
-2. Total Hours Spent on Project:
+2. Total Hours Spent on Project: 16
 
-3. Have you completed the advanced component?:
+3. Have you completed the advanced component?: Yes/No
 
-4. Project Bucks Used:
+4. Project Bucks Used: 0
 
-5. (Optional) Additional Comments:
+5. (Optional) Additional Comments: This project was extremely interesting and
+very satisfying upon completion. 

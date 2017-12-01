@@ -3,9 +3,12 @@
  *
  * Hamez Rodriguez y Smeagol
  *
+ * This program implements a linux shell. Capable of executing 
+ * commands both, in foreground and background. It uses 
+ * commands such as fork, execvp, and waitpid system calls to
+ * control processes. 
  */
 
-// NOTE: all new includes should go after the following #define
 #define _XOPEN_SOURCE 600
 
 #include <stdlib.h>
@@ -19,8 +22,7 @@
 #include "parse_args.h"
 #include "history_queue.h"
 
-
-// TODO: add your function prototypes here as necessary
+// Forward function declarations 
 void execCmd(char *argv[], int ret); 
 void cd(char *argv[]); 
 void unix_error(char*msg);
@@ -118,6 +120,9 @@ void execCmd(char *argv[], int ret) {
 
 /**
  * Execute cd command
+ * @param *argv[] The vector of of current command line 
+ * arguements to navigate the system using cd command 
+ * syntax 
  */
 void cd(char *argv[]) {
 	char cmdline[MAXLINE];
@@ -132,11 +137,21 @@ void cd(char *argv[]) {
 	}
 }
 
+/*
+ * Prints out a message is an error has occured
+ * @param *msg A message to be displayed to address
+ * the error that has occured
+ */
 void unix_error(char *msg) {
 	fprintf(stderr, "%s: %s\n", msg, strerror(errno));
 	exit(0);
 }
 
+/*
+ *
+ *
+ *
+ */
 pid_t Fork(void) {
 	pid_t pid;
 	if ((pid = fork()) < 0)
@@ -144,10 +159,15 @@ pid_t Fork(void) {
 	return pid;
 }
 
+/*
+ *
+ *
+ *
+ */
 void child_handler(__attribute__ ((unused)) int sig) {
 	pid_t pid;
 	int status;
-	while((waitpid(pid, &status, 0)) != -1) {
+	while((pid = waitpid(pid, &status, 0)) != -1) {
 		//handle death of pid, pid
 	}
 }
