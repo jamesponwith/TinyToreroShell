@@ -58,24 +58,30 @@ int main() {
 		}
 
 		// TODO: remove this line after you are done testing/debugging.
-		//fprintf(stdout, "DEBUG: %s\n", cmdline);
+		fprintf(stdout, "DEBUG: %s\n", cmdline);
 
 		// TODO: complete top-level steps
 		// (3) make a call to parseArguments function to parse it into its argv
 		// format
 		char *argv[MAXARGS];
 
+
+		int ret = parseArguments(cmdline, argv);
+
 		if (argv[0] == NULL) {
 			continue;
 		}
 
-		int ret = parseArguments(cmdline, argv);
+		if (ret == 0) {
+			// run in background
+			ret++;
+		}
+		else {
+			// run in foreground
+			ret++;
+		}
 
 		addEntry(cmdline);	
-
-		if (ret != 0) {
-			printf("something went wrong");
-		}
 
 		// (4) Call a function that will determine how to execute the command
 		// that the user entered, and then execute it
@@ -96,14 +102,22 @@ void execCmd(char *argv[]) {
 	}
 	else if(strcmp(argv[0], "history") == 0) {
 		printHistory();
+		return;
 	}
+	/*
 	else {
-		if (Fork() == 0) {
-
+		int status;
+		pid_t pid;
+		pid = Fork();
+		if (pid != 0) { // Child
+			printf("in chile");
+			execvp(argv[0], argv);
 		}
-		// fork and wait
-				
+		else {
+			waitpid(-1, &status, 0);
+		}
 	}
+	*/
 }
 
 /**
