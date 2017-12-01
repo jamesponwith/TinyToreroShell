@@ -25,6 +25,7 @@ void execCmd(char *argv[], int ret);
 void cd(char *argv[]); 
 void unix_error(char*msg);
 pid_t Fork(void); 
+int argv_size(char *argv[]); 
 
 int main() { 
 	// TODO: Add a call to sigaction to register your SIGCHLD signal handler
@@ -64,7 +65,6 @@ int main() {
 		// (3) make a call to parseArguments function to parse it into its argv
 		// format
 		char *argv[MAXARGS];
-
 		int ret = parseArguments(cmdline, argv);
 
 		if (argv[0] == NULL) {
@@ -72,7 +72,6 @@ int main() {
 		}
 
 		addEntry(cmdline);	
-
 		// (4) Call a function that will determine how to execute the command
 		// that the user entered, and then execute it
 		execCmd(argv, ret);
@@ -88,16 +87,18 @@ void execCmd(char *argv[], int ret) {
 	if (strcmp(argv[0], "exit") == 0) {
 		fprintf(stdout, "adios...\n");
 		exit(0);
-		//return 0;
 	}
 	else if(strcmp(argv[0], "history") == 0) {
 		printHistory();
 		return;
 	}
+	else if(ret == 1) {
+		fprintf(stdout,"%s\n", "Background");
+	}
 	else {
 		int status;
 		pid_t child_pid; 
-
+		printf("%d\n", ret);
 		if ((child_pid = Fork()) == 0) { // Child
 			if (execvp(argv[0], argv) == -1) {
 				fprintf(stdout, "command does not exist\n");
@@ -108,7 +109,7 @@ void execCmd(char *argv[], int ret) {
 			waitpid(-1, &status, 0);
 		}
 	}
-	ret++;
+	ret++; // ret returns 0 prior to this and 1 after
 }
 
 /**
@@ -137,4 +138,12 @@ pid_t Fork(void) {
 	if ((pid = fork()) < 0)
 		unix_error("Fork error");
 	return pid;
+}
+
+int argv_size(char *argv[]) {
+	int counter = 0;
+	while(argv[counter] != NULL) {
+		counter++;
+	}
+	return counter;
 }
