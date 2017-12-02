@@ -1,7 +1,7 @@
 /*
  * The Tiny Torero Shell (TTSH)
  *
- * Hamez Rodriguez y Smeagol
+ * James Ponwith and Patrick Hall 
  *
  * This program implements a linux shell. Capable of executing 
  * commands both, in foreground and background. It uses 
@@ -89,16 +89,68 @@ void isBangNum(char *cmd) {
  * syntax 
  */
 void cd(char *argv[]) {
-	char cmdline[MAXLINE];
-  	//getenv(cmdline);
-	if (argv[1] == NULL) {
-		chdir(getenv(cmdline));
-		return;
+	char *cmdline;
+	char get_directory[MAXLINE];
+	char *directory = NULL; 
+	char *new_directory = NULL;
+	getcwd(get_directory, sizeof(get_directory)); //get_directory holds the cwd
+	//fprintf(stdout, "%s\n", get_directory);
+	char cwd_copy[sizeof(get_directory)];
+    char *token_path[sizeof(get_directory)];	
+	strcpy(cwd_copy, get_directory);
+	cmdline = strtok(cwd_copy, "/");
+	unsigned int i = 0;
+	
+	while(cmdline != NULL) {
+		//printf("%hd\n", cmdline[i]);
+		token_path[++i] = cmdline;
+		cmdline = strtok(NULL, "/");
+		printf("%s\n", token_path[i]);
 	}
+
+	//for(; i <(sizeof(token_path)/sizeof(token_path[0])); i++) {
+		//HOME works
+		if (argv[1] == NULL) {
+			chdir(getenv("HOME"));
+			return;
+		}
+		
+		else {
+			if(chdir(argv[1]) == -1) {
+				fprintf(stdout, "%s%s\n", "No such directory\n", argv[1]);
+			}
+			else if(strcmp(argv[1], "..") == 0) {
+				unsigned int j = 0;
+				for(; j<((sizeof(token_path)/sizeof(token_path[0])-1)); j++) {
+					new_directory = strcat(token_path[j], "/");
+				}
+				chdir(new_directory);	
+			} 
+			else {
+				directory = strcat(get_directory, "/");
+				new_directory = strcat(directory, argv[1]);
+				chdir(new_directory);
+			}
+		}
+	//}
+
+/*
+	//Not work
 	else if (strcmp(argv[1], "..")) {
-		chdir(cmdline);
+		chdir(new_directory);
 		return;
 	}
+
+	//Not work
+	else if((argv[1] != NULL) && (strcmp(argv[1], "..") != 0)) {
+		
+		directory = strcat(get_directory, "/");
+		new_directory = strcat(directory, argv[1]);
+		chdir(new_directory);
+		return;
+	}
+
+*/	
 }
 
 /*
