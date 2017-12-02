@@ -20,5 +20,6 @@ typedef struct {
 int histSize();
 void addEntry(char new_cmd[MAXLINE]);
 void printHistory();
+void numToCmd(char *cmd);
 
 #endif

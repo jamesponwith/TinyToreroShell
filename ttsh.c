@@ -15,9 +15,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <ctype.h>
 #include <sys/types.h> 
 #include <sys/wait.h>
 #include <sys/errno.h>
+#include <assert.h>
 
 #include "parse_args.h"
 #include "history_queue.h"
@@ -29,6 +31,7 @@ void unix_error(char*msg);
 pid_t Fork(void); 
 void child_handler(__attribute__ ((unused)) int sig);
 int isBuiltIn(char *argv[]); 
+void isBangNum(char cmd[MAXLINE]);
 
 int main() { 
 	struct sigaction sa;
@@ -53,6 +56,9 @@ int main() {
 		}
 
 		char *argv[MAXARGS];
+
+		isBangNum(cmdline);
+
 		int ret = parseArguments(cmdline, argv);
 		if (argv[0] == NULL) {
 			continue;
@@ -67,6 +73,14 @@ int main() {
 	}
 	return 0;
 }
+
+void isBangNum(char *cmd) {
+	if (cmd[0] == '!') {
+		memmove(cmd, cmd+1, strlen(cmd));
+		numToCmd(cmd);
+	}
+}
+
 
 /**
  * Execute cd command
@@ -98,12 +112,7 @@ int isBuiltIn(char *argv[]) {
 		exit(0);
 	}
 	else if (strcmp(argv[0], "history") == 0) {
-		if (argv[1] == NULL) {
-			printHistory();
-		}
-		else {
-			// !num
-		}
+		printHistory();
 		return 1;
 	}
 	else if (strcmp(argv[0], "cd") == 0) {
@@ -115,26 +124,6 @@ int isBuiltIn(char *argv[]) {
 
 /*
  * Execute commands in argv
-void execCmd(char *argv[], int ret) {
-	int status;
-	pid_t child_pid; 		
-	if ((child_pid = Fork()) == 0) { // Child runs this
-		setpgid(0, 0);
-		if (execvp(argv[0], argv) == -1) {
-			fprintf(stdout, "command no es aqui\n");
-			exit(0);
-		}
-	}
-	else { // Parent runs this
-		if (ret == 0) { //  foregrund
-			waitpid(child_pid, &status, 0); // wait for child
-			return;
-		}
-		else { //background
-			return; //dont wait for child.
-		}
-	}
-}
 */
 
 void execCmd(char *argv[], int ret) {

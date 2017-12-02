@@ -31,6 +31,16 @@ static int rear = 0;
 static int cmd_count = 0;
 
 // TODO: implement your history queue functions here
+//
+
+void numToCmd(char *cmd) {
+	unsigned int cmd_index = atoi(cmd);
+	for (int i = 0; i < MAXHIST; i++) { // loop through MAXHIST number of times
+		if (cmd_index == history[i].cmd_num) {
+			strcpy(cmd, history[i].cmdline);
+		}
+	}
+}
 
 void addEntry(char new_cmd[MAXLINE]) {
 	cmd_count++;
