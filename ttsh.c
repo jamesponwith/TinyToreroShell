@@ -75,33 +75,59 @@ int main() {
  * syntax 
  */
 void cd(char *argv[]) {
-	//char cmdline[MAXLINE];
-	char buf[MAXLINE];
-	char *split_buf = NULL;
-	char *get_directory = getcwd(buf, sizeof(buf));
-	char *token = NULL;
+	char *cmdline;
+	char get_directory[MAXLINE];
 	char *directory = NULL; 
 	char *new_directory = NULL;
-	int i = 0;
-	while(token != NULL) {
-		token = strtok(get_directory, "/"); 
-		int size = sizeof(token);
-		strncpy(&split_buf[i], token, size);
-		i++;
-	}	
-	if (argv[1] == NULL) {
-		chdir(getenv("HOME"));
-		return;
+	getcwd(get_directory, sizeof(get_directory)); //get_directory holds the cwd
+	//fprintf(stdout, "%s\n", get_directory);
+	char cwd_copy[sizeof(get_directory)];
+    char *token_path[sizeof(get_directory)];	
+	strcpy(cwd_copy, get_directory);
+	cmdline = strtok(cwd_copy, "/");
+	unsigned int i = 0;
+	
+	while(cmdline != NULL) {
+		//printf("%hd\n", cmdline[i]);
+		token_path[++i] = cmdline;
+		cmdline = strtok(NULL, "/");
+		printf("%s\n", token_path[i]);
 	}
-	else if (strcmp(argv[1], "..")) {
-		int j = 0;
-		while(j <= i-1) {
-			new_directory = strcat(&split_buf[j], "/");
-			j++;
+
+	//for(; i <(sizeof(token_path)/sizeof(token_path[0])); i++) {
+		//HOME works
+		if (argv[1] == NULL) {
+			chdir(getenv("HOME"));
+			return;
 		}
+		
+		else {
+			if(chdir(argv[1]) == -1) {
+				fprintf(stdout, "%s%s\n", "No such directory\n", argv[1]);
+			}
+			else if(strcmp(argv[1], "..") == 0) {
+				unsigned int j = 0;
+				for(; j<((sizeof(token_path)/sizeof(token_path[0])-1)); j++) {
+					new_directory = strcat(token_path[j], "/");
+				}
+				chdir(new_directory);	
+			} 
+			else {
+				directory = strcat(get_directory, "/");
+				new_directory = strcat(directory, argv[1]);
+				chdir(new_directory);
+			}
+		}
+	//}
+
+/*
+	//Not work
+	else if (strcmp(argv[1], "..")) {
 		chdir(new_directory);
 		return;
 	}
+
+	//Not work
 	else if((argv[1] != NULL) && (strcmp(argv[1], "..") != 0)) {
 		
 		directory = strcat(get_directory, "/");
@@ -109,6 +135,8 @@ void cd(char *argv[]) {
 		chdir(new_directory);
 		return;
 	}
+
+*/	
 }
 
 /*
