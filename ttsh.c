@@ -1,7 +1,7 @@
 /*
  * The Tiny Torero Shell (TTSH)
  *
- * Hamez Rodriguez y Smeagol
+ * James Ponwith and Patrick Hall 
  *
  * This program implements a linux shell. Capable of executing 
  * commands both, in foreground and background. It uses 
@@ -75,14 +75,38 @@ int main() {
  * syntax 
  */
 void cd(char *argv[]) {
-	char cmdline[MAXLINE];
-  	//getenv(cmdline);
+	//char cmdline[MAXLINE];
+	char buf[MAXLINE];
+	char *split_buf = NULL;
+	char *get_directory = getcwd(buf, sizeof(buf));
+	char *token = NULL;
+	char *directory = NULL; 
+	char *new_directory = NULL;
+	int i = 0;
+	while(token != NULL) {
+		token = strtok(get_directory, "/"); 
+		int size = sizeof(token);
+		strncpy(&split_buf[i], token, size);
+		i++;
+	}	
 	if (argv[1] == NULL) {
-		chdir(getenv(cmdline));
+		chdir(getenv("HOME"));
 		return;
 	}
 	else if (strcmp(argv[1], "..")) {
-		chdir(cmdline);
+		int j = 0;
+		while(j <= i-1) {
+			new_directory = strcat(&split_buf[j], "/");
+			j++;
+		}
+		chdir(new_directory);
+		return;
+	}
+	else if((argv[1] != NULL) && (strcmp(argv[1], "..") != 0)) {
+		
+		directory = strcat(get_directory, "/");
+		new_directory = strcat(directory, argv[1]);
+		chdir(new_directory);
 		return;
 	}
 }
