@@ -28,7 +28,7 @@ void cd(char *argv[]);
 void unix_error(char*msg);
 pid_t Fork(void); 
 void child_handler(__attribute__ ((unused)) int sig);
-int builtIn(char *argv[]); 
+int isBuiltIn(char *argv[]); 
 
 int main() { 
 	struct sigaction sa;
@@ -43,46 +43,37 @@ int main() {
 		char cmdline[MAXLINE];
 		if ((fgets(cmdline, MAXLINE, stdin) == NULL)
 				&& ferror(stdin)) {
-			// fgets could be interrupted by a signal.
-			// This checks to see if that happened, in which case we simply
-			// clear out the error and restart our loop so it re-prompts the
-			// user for a command.
 			clearerr(stdin);
 			continue;
 		}
 
-		/*
-		 * Check to see if we reached the end "file" for stdin, exiting the
-		 * program if that is the case. Note that you can simulate EOF by
-		 * typing CTRL-D when it prompts you for input.
-		 */
 		if (feof(stdin)) {
 			fflush(stdout);
 			exit(0);
 		}
 
-		//fprintf(stdout, "DEBUG: %s\n", cmdline);
-
 		char *argv[MAXARGS];
 		int ret = parseArguments(cmdline, argv);
-
 		if (argv[0] == NULL) {
 			continue;
 		}
 
 		addEntry(cmdline);	
-
-		if (builtIn(argv) == 1) {
+		if (isBuiltIn(argv) == 1) {
 			continue;
 		}
-		else {
-			execCmd(argv, ret);
-		}
+
+		execCmd(argv, ret);
 	}
 	return 0;
 }
 
-int builtIn(char *argv[]) {
+/*
+ * Checks if command is built in this program
+ * executes command and returns 1 if so
+ * returns 0 if not
+ */
+int isBuiltIn(char *argv[]) {
 	if (strcmp(argv[0], "exit") == 0) {
 		fprintf(stdout, "adios...\n");
 		exit(0);
@@ -91,14 +82,11 @@ int builtIn(char *argv[]) {
 		printHistory();
 		return 1;
 	}
-	else {
-		return 0;
-	}
+	return 0;
 }
 
 /*
  * Execute commands in argv
- */
 void execCmd(char *argv[], int ret) {
 	int status;
 	pid_t child_pid; 		
@@ -111,15 +99,29 @@ void execCmd(char *argv[], int ret) {
 	}
 	else { // Parent runs this
 		if (ret == 0) { //  foregrund
-			fprintf(stdout, "\t\t foreground\n");
 			waitpid(child_pid, &status, 0); // wait for child
 			return;
 		}
 		else { //background
-			fprintf(stdout, "\t\t background\n");
 			return; //dont wait for child.
 		}
 	}
+}
+*/
+
+void execCmd(char *argv[], int ret) {
+	int status;
+	pid_t child_pid; 		
+	if ((child_pid = Fork()) == 0) { // Child runs this
+		setpgid(0, 0);
+		if (execvp(argv[0], argv) == -1) {
+			fprintf(stdout, "command no es aqui\n");
+			exit(0);
+		}
+	}
+	else if (ret == 0) { //  foregrund
+		waitpid(child_pid, &status, 0); // wait for child
+	}	
 }
 
 /**
@@ -155,8 +157,9 @@ void unix_error(char *msg) {
  */
 pid_t Fork(void) {
 	pid_t pid;
-	if ((pid = fork()) < 0)
+	if ((pid = fork()) < 0) {
 		unix_error("Fork error");
+	}
 	return pid;
 }
 
@@ -165,7 +168,5 @@ pid_t Fork(void) {
 void child_handler(__attribute__ ((unused)) int sig) {
 	pid_t pid;
 	int status;
-	while((pid = waitpid(pid, &status, WNOHANG)) != -1) {
-		// chill here
-	}
+	while((pid = waitpid(pid, &status, WNOHANG)) != -1) {}
 }
