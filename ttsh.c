@@ -68,6 +68,25 @@ int main() {
 	return 0;
 }
 
+/**
+ * Execute cd command
+ * @param *argv[] The vector of of current command line 
+ * arguements to navigate the system using cd command 
+ * syntax 
+ */
+void cd(char *argv[]) {
+	char cmdline[MAXLINE];
+  	//getenv(cmdline);
+	if (argv[1] == NULL) {
+		chdir(getenv(cmdline));
+		return;
+	}
+	else if (strcmp(argv[1], "..")) {
+		chdir(cmdline);
+		return;
+	}
+}
+
 /*
  * Checks if command is built in this program
  * executes command and returns 1 if so
@@ -79,7 +98,16 @@ int isBuiltIn(char *argv[]) {
 		exit(0);
 	}
 	else if (strcmp(argv[0], "history") == 0) {
-		printHistory();
+		if (argv[1] == NULL) {
+			printHistory();
+		}
+		else {
+			// !num
+		}
+		return 1;
+	}
+	else if (strcmp(argv[0], "cd") == 0) {
+		cd(argv);
 		return 1;
 	}
 	return 0;
@@ -124,24 +152,6 @@ void execCmd(char *argv[], int ret) {
 	}	
 }
 
-/**
- * Execute cd command
- * @param *argv[] The vector of of current command line 
- * arguements to navigate the system using cd command 
- * syntax 
- */
-void cd(char *argv[]) {
-	char cmdline[MAXLINE];
-  	//getenv(cmdline);
-	if (argv[1] == NULL) {
-		chdir(getenv(cmdline));
-		return;
-	}
-	else if (strcmp(argv[1], "..")) {
-		chdir(cmdline);
-		return;
-	}
-}
 
 /*
  * Prints out a message is an error has occured
