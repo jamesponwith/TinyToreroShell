@@ -198,6 +198,11 @@ pid_t Fork(void) {
 }
 
 /*
+ * Handles the child and makes the parent process wait
+ * as the child process executes. Additionally, waitpid
+ * reaps all children. 
+ *
+ * @param int sig Attribute unused 
  */
 void child_handler(__attribute__ ((unused)) int sig) {
 	pid_t pid;
