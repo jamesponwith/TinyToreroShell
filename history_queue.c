@@ -12,27 +12,16 @@
 
 #include "history_queue.h"
 
-// global variables: add only globals for history list state
-//                   all other variables should be allocated on the stack
-// static: means these variables are only in scope in this .c module
-
 static HistoryEntry history[MAXHIST]; 
-
-// Look at your lab 10 implementation of a circular queue of integers and
-// reuse liberally.
-
-// TODO: Add some more global variables for the history list.
-//       These should be the only globals in your program
-//       They should be static so that only functions in this file can
-//       access them.
 
 static int front = 0;
 static int rear = 0;
 static int cmd_count = 0;
 
-// TODO: implement your history queue functions here
-//
-
+/*
+ * Enables the '!num' syntax to execute
+ * a command by the command number
+ */
 void numToCmd(char *cmd) {
 	unsigned int cmd_index = atoi(cmd);
 	for (int i = 0; i < MAXHIST; i++) { // loop through MAXHIST number of times
@@ -42,6 +31,11 @@ void numToCmd(char *cmd) {
 	}
 }
 
+/*
+ * Copies the users most recent command
+ * into the circular queue while 
+ * assiging each with a command number
+ */
 void addEntry(char new_cmd[MAXLINE]) {
 	cmd_count++;
 
@@ -55,6 +49,10 @@ void addEntry(char new_cmd[MAXLINE]) {
 	}
 }
 
+/*
+ * Loops through the history queue printing
+ * the most recent 10 commands
+ */
 void printHistory() {
 	int j = front;
 	for (int i = 0; i < MAXHIST; i++) { // loop through MAXHIST number of times

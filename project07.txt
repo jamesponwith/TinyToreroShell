@@ -4,7 +4,7 @@ COMP 280 - Project 06 (Tiny Torero Shell)
 
 2. Total Hours Spent on Project: 16
 
-3. Have you completed the advanced component?: Yes/No
+3. Have you completed the advanced component?: Yes
 
 4. Project Bucks Used: 1
 

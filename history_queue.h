@@ -9,8 +9,9 @@
 #define MAXHIST 10   // max number of commands in history list
 
 /*
- * A struct to keep information one command in the history of 
- * command executed
+ * A struct to keep information one 
+ * command in the history of command 
+ * executed
  */
 typedef struct {              
     unsigned int cmd_num;
