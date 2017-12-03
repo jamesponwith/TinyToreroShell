@@ -32,6 +32,8 @@ pid_t Fork(void);
 void child_handler(__attribute__ ((unused)) int sig);
 int isBuiltIn(char *argv[]); 
 void isBangNum(char cmd[MAXLINE]);
+void nextDir(char *argv[]); 
+int lastIndexOf(const char *str, const char toFind); 
 
 int main() { 
 	struct sigaction sa;
@@ -81,6 +83,76 @@ void isBangNum(char *cmd) {
 	}
 }
 
+void nextDir(char *argv[]) {
+	char *new_cwd = NULL;
+	char cwd[MAXLINE];
+	getcwd(cwd, sizeof(cwd));
+
+	new_cwd = strcat(cwd, "/");
+	new_cwd = strcat(new_cwd, argv[1]);
+	chdir(new_cwd);
+	return;
+}
+
+void cd(char *argv[]) {
+	if (argv[1] == NULL) {
+		chdir(getenv("HOME"));
+		return;
+	}
+	else {
+		char *token; 
+		char *token_arr[MAXLINE];
+		int i = 0;
+		char cwd[MAXLINE];
+		getcwd(cwd, sizeof(cwd));
+
+		token = strtok(argv[1], "/");
+		
+		while (token != NULL) {
+			token_arr[++i] = token;  
+			token = strtok(NULL, "/");
+			fprintf(stdout, "%s%s\n", token_arr[i], "/");
+		}
+		if (strcmp(token_arr[1], "..") != 0) {
+			nextDir(argv);
+			return;
+		}
+		else {
+			unsigned int i = 1;
+			char new_dir[MAXLINE];
+			for(; i < ((sizeof(token_arr) / sizeof(token_arr[0]))); i++) {
+				if (token_arr[i] == NULL) {
+					break;
+				}
+				if (strcmp(token_arr[i], "..") == 0) {
+					// go back
+					int last = lastIndexOf(cwd, '/');
+					int pos = strlen(cwd) - last; 
+					pos = strlen(cwd) - pos;
+					strncpy(new_dir, getcwd(cwd, sizeof(cwd)), pos);
+					chdir(new_dir);
+				}	
+				else {
+				   // go the the dir
+				   // check if dir exits
+				}	
+				strncpy(cwd, new_dir, sizeof(new_dir));
+				i++;
+			}
+		}
+	}
+}
+int lastIndexOf(const char *str, const char toFind) {
+	int index = -1;
+	int i = 0;
+	while(str[i] != '\0') {
+		if (str[i] == toFind) {
+			index = i;
+		}
+		i++;
+	}	
+	return index;
+}
 
 /**
  * Execute cd command
@@ -88,6 +160,7 @@ void isBangNum(char *cmd) {
  * arguements to navigate the system using cd command 
  * syntax 
  */
+/*
 void cd(char *argv[]) {
 	char *cmdline;
 	char get_directory[MAXLINE];
@@ -134,7 +207,6 @@ void cd(char *argv[]) {
 		}
 	//}
 
-/*
 	//Not work
 	else if (strcmp(argv[1], "..")) {
 		chdir(new_directory);
@@ -150,8 +222,8 @@ void cd(char *argv[]) {
 		return;
 	}
 
-*/	
 }
+*/
 
 /*
  * Checks if command is built in this program
