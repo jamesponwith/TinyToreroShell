@@ -20,6 +20,7 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 #include <assert.h>
+#include <libgen.h>
 
 #include "parse_args.h"
 #include "history_queue.h"
@@ -90,7 +91,9 @@ void nextDir(char *argv[]) {
 
 	new_cwd = strcat(cwd, "/");
 	new_cwd = strcat(new_cwd, argv[1]);
-	chdir(new_cwd);
+	if(chdir(new_cwd) == -1) {
+		fprintf(stdout, "directory does not exist");
+	}
 	return;
 }
 
@@ -99,25 +102,43 @@ void cd(char *argv[]) {
 		chdir(getenv("HOME"));
 		return;
 	}
+	else if (strcmp(argv[1], "..") != 0) {
+		nextDir(argv);
+		return;
+	}
+	else {
+		char cwd[MAXLINE];
+		getcwd(cwd, sizeof(cwd));
+		chdir(dirname(cwd));
+		return;
+	}
+}
+/*
+void cd(char *argv[]) {
+	if (argv[1] == NULL) {
+		chdir(getenv("HOME"));
+		return;
+	}
 	else {
 		char *token; 
 		char *token_arr[MAXLINE];
-		int i = 0;
+		int j = 0;
 		char cwd[MAXLINE];
 		getcwd(cwd, sizeof(cwd));
 
 		token = strtok(argv[1], "/");
 		
 		while (token != NULL) {
-			token_arr[++i] = token;  
+			token_arr[++j] = token;  
 			token = strtok(NULL, "/");
-			fprintf(stdout, "%s%s\n", token_arr[i], "/");
+			fprintf(stdout, "%s%s\n", token_arr[j], "/");
 		}
 		if (strcmp(token_arr[1], "..") != 0) {
 			nextDir(argv);
 			return;
 		}
-		else {
+
+		else { // if ..
 			unsigned int i = 1;
 			char new_dir[MAXLINE];
 			for(; i < ((sizeof(token_arr) / sizeof(token_arr[0]))); i++) {
@@ -129,19 +150,23 @@ void cd(char *argv[]) {
 					int last = lastIndexOf(cwd, '/');
 					int pos = strlen(cwd) - last; 
 					pos = strlen(cwd) - pos;
-					strncpy(new_dir, getcwd(cwd, sizeof(cwd)), pos);
+					char *temp = getcwd(cwd, sizeof(cwd));
+					strncpy(new_dir, temp, pos);
 					chdir(new_dir);
 				}	
 				else {
 				   // go the the dir
 				   // check if dir exits
 				}	
-				strncpy(cwd, new_dir, sizeof(new_dir));
-				i++;
+				getcwd(new_dir, sizeof(cwd));
+				//strncpy(cwd, new_dir, sizeof(new_dir));
+				//i++;
 			}
 		}
 	}
 }
+*/
+
 int lastIndexOf(const char *str, const char toFind) {
 	int index = -1;
 	int i = 0;
@@ -154,82 +179,6 @@ int lastIndexOf(const char *str, const char toFind) {
 	return index;
 }
 
-/**
- * Execute cd command
- * @param *argv[] The vector of of current command line 
- * arguements to navigate the system using cd command 
- * syntax 
- */
-/*
-void cd(char *argv[]) {
-	char *cmdline;
-	char get_directory[MAXLINE];
-	char *directory = NULL; 
-	char *new_directory = NULL;
-	getcwd(get_directory, sizeof(get_directory)); //get_directory holds the cwd
-	//fprintf(stdout, "%s\n", get_directory);
-	char cwd_copy[sizeof(get_directory)];
-    char *token_path[sizeof(get_directory)];	
-	strcpy(cwd_copy, get_directory);
-	cmdline = strtok(cwd_copy, "/");
-	unsigned int i = 0;
-	
-	while(cmdline != NULL) {
-		//printf("%hd\n", cmdline[i]);
-		token_path[++i] = cmdline;
-		cmdline = strtok(NULL, "/");
-		printf("%s\n", token_path[i]);
-	}
-
-	//for(; i <(sizeof(token_path)/sizeof(token_path[0])); i++) {
-		//HOME works
-		if (argv[1] == NULL) {
-			chdir(getenv("HOME"));
-			return;
-		}
-		
-		else {
-			if(chdir(argv[1]) == -1) {
-				fprintf(stdout, "%s%s\n", "No such directory\n", argv[1]);
-			}
-			else if(strcmp(argv[1], "..") == 0) {
-				unsigned int j = 0;
-				for(; j<((sizeof(token_path)/sizeof(token_path[0])-1)); j++) {
-					new_directory = strcat(token_path[j], "/");
-				}
-				chdir(new_directory);	
-			} 
-			else {
-				directory = strcat(get_directory, "/");
-				new_directory = strcat(directory, argv[1]);
-				chdir(new_directory);
-			}
-		}
-	//}
-
-	//Not work
-	else if (strcmp(argv[1], "..")) {
-		chdir(new_directory);
-		return;
-	}
-
-	//Not work
-	else if((argv[1] != NULL) && (strcmp(argv[1], "..") != 0)) {
-		
-		directory = strcat(get_directory, "/");
-		new_directory = strcat(directory, argv[1]);
-		chdir(new_directory);
-		return;
-	}
-
-}
-*/
-
-/*
- * Checks if command is built in this program
- * executes command and returns 1 if so
- * returns 0 if not
- */
 int isBuiltIn(char *argv[]) {
 	if (strcmp(argv[0], "exit") == 0) {
 		fprintf(stdout, "adios...\n");
