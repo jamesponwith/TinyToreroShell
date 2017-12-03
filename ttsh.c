@@ -109,7 +109,6 @@ int isBuiltIn(char *argv[]) {
 
 /* 
  * Determines if the command is of the format !num
- *
  * @param *cmd argv[1]
  */
 void isBangNum(char *cmd) {
@@ -122,7 +121,6 @@ void isBangNum(char *cmd) {
 
 /*
  * Functionality for the cd command
- * 
  * @param argv Command line arguments
  */
 void cd(char *argv[]) {
@@ -144,7 +142,6 @@ void cd(char *argv[]) {
 
 /*
  * Changes cwd to the dir specified by argv[1]
- *
  * @param argv Command line arguments
  */
 void nextDir(char *argv[]) {
@@ -162,7 +159,6 @@ void nextDir(char *argv[]) {
 
 /*
  * Execute commands in argv
- *
  * @param argv Command line arguments
  * @param ret Determines if command to run foreground or bakckground
 */

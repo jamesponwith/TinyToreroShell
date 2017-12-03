@@ -24,7 +24,7 @@ static int cmd_count = 0;
  */
 void numToCmd(char *cmd) {
 	unsigned int cmd_index = atoi(cmd);
-	for (int i = 0; i < MAXHIST; i++) { // loop through MAXHIST number of times
+	for (int i = 0; i < MAXHIST; i++) { 
 		if (cmd_index == history[i].cmd_num) {
 			strcpy(cmd, history[i].cmdline);
 		}
