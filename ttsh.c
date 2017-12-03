@@ -24,14 +24,14 @@
 #include "parse_args.h"
 #include "history_queue.h"
 
-int shellEntry(char cmdline[MAXLINE]); 
+pid_t Fork(void); 
+void cd(char *argv[]); 
+void unix_error(char*msg);
+void nextDir(char *argv[]); 
 int isBuiltIn(char *argv[]); 
 void isBangNum(char cmd[MAXLINE]);
-void cd(char *argv[]); 
-void nextDir(char *argv[]); 
+int shellEntry(char cmdline[MAXLINE]); 
 void execCmd(char *argv[], int ret); 
-pid_t Fork(void); 
-void unix_error(char*msg);
 void child_handler(__attribute__ ((unused)) int sig);
 
 int main() { 
