@@ -6,7 +6,7 @@ COMP 280 - Project 06 (Tiny Torero Shell)
 
 3. Have you completed the advanced component?: Yes/No
 
-4. Project Bucks Used: 0
+4. Project Bucks Used: 1
 
 5. (Optional) Additional Comments: This project was extremely interesting and
 very satisfying upon completion. 
