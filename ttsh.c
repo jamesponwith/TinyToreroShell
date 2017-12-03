@@ -60,7 +60,13 @@ int main() {
 }
 
 /* 
- * 
+ * Takes in a command and parses it, determines
+ * the type of command, then exectures the 
+ * command
+ *
+ * @param cmdline[MAXLINE] the users command] 
+ * @return 1 if command is to run in background
+ * @return 0 if command is to run in foreground
  */
 int shellEntry(char cmdline[MAXLINE]) {
 	char *argv[MAXARGS];
