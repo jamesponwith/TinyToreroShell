@@ -19,13 +19,11 @@
 #include <sys/types.h> 
 #include <sys/wait.h>
 #include <sys/errno.h>
-#include <assert.h>
 #include <libgen.h>
 
 #include "parse_args.h"
 #include "history_queue.h"
 
-// Forward function declarations 
 void execCmd(char *argv[], int ret); 
 void cd(char *argv[]); 
 void unix_error(char*msg);
@@ -34,49 +32,56 @@ void child_handler(__attribute__ ((unused)) int sig);
 int isBuiltIn(char *argv[]); 
 void isBangNum(char cmd[MAXLINE]);
 void nextDir(char *argv[]); 
-int lastIndexOf(const char *str, const char toFind); 
+int shellEntry(char cmdline[MAXLINE]); 
 
 int main() { 
 	struct sigaction sa;
 	sa.sa_handler = child_handler;
 	sa.sa_flags = SA_NOCLDSTOP;
 	sigaction(SIGCHLD, &sa, NULL);
-
 	while(1) {
 		fprintf(stdout, "ttsh> ");  
 		fflush(stdout);
-
 		char cmdline[MAXLINE];
 		if ((fgets(cmdline, MAXLINE, stdin) == NULL)
 				&& ferror(stdin)) {
 			clearerr(stdin);
 			continue;
 		}
-
 		if (feof(stdin)) {
 			fflush(stdout);
 			exit(0);
 		}
-
-		char *argv[MAXARGS];
-
-		isBangNum(cmdline);
-
-		int ret = parseArguments(cmdline, argv);
-		if (argv[0] == NULL) {
+		if (shellEntry(cmdline) == 1) {
 			continue;
 		}
-
-		addEntry(cmdline);	
-		if (isBuiltIn(argv) == 1) {
-			continue;
-		}
-
-		execCmd(argv, ret);
 	}
 	return 0;
 }
 
+/* 
+ * 
+ */
+int shellEntry(char cmdline[MAXLINE]) {
+	char *argv[MAXARGS];
+	isBangNum(cmdline);
+	int ret = parseArguments(cmdline, argv);
+	if (argv[0] == NULL) {
+		return 1; 
+	}
+	addEntry(cmdline);	
+	if (isBuiltIn(argv) == 1) {
+		return 1;
+	}
+	execCmd(argv, ret);
+	return 0;
+}
+
+/* 
+ * Determines if the command is of the format !num
+ *
+ * @param *cmd argv[1]
+ */
 void isBangNum(char *cmd) {
 	if (cmd[0] == '!') {
 		memmove(cmd, cmd+1, strlen(cmd));
@@ -84,6 +89,11 @@ void isBangNum(char *cmd) {
 	}
 }
 
+/*
+ * Changes cwd to the dir specified by argv[1]
+ *
+ * @param argv Command line arguments
+ */
 void nextDir(char *argv[]) {
 	char *new_cwd = NULL;
 	char cwd[MAXLINE];
@@ -97,6 +107,11 @@ void nextDir(char *argv[]) {
 	return;
 }
 
+/*
+ * Functionality for the cd command
+ * 
+ * @param argv Command line arguments
+ */
 void cd(char *argv[]) {
 	if (argv[1] == NULL) {
 		chdir(getenv("HOME"));
@@ -113,72 +128,15 @@ void cd(char *argv[]) {
 		return;
 	}
 }
-/*
-void cd(char *argv[]) {
-	if (argv[1] == NULL) {
-		chdir(getenv("HOME"));
-		return;
-	}
-	else {
-		char *token; 
-		char *token_arr[MAXLINE];
-		int j = 0;
-		char cwd[MAXLINE];
-		getcwd(cwd, sizeof(cwd));
 
-		token = strtok(argv[1], "/");
-		
-		while (token != NULL) {
-			token_arr[++j] = token;  
-			token = strtok(NULL, "/");
-			fprintf(stdout, "%s%s\n", token_arr[j], "/");
-		}
-		if (strcmp(token_arr[1], "..") != 0) {
-			nextDir(argv);
-			return;
-		}
-
-		else { // if ..
-			unsigned int i = 1;
-			char new_dir[MAXLINE];
-			for(; i < ((sizeof(token_arr) / sizeof(token_arr[0]))); i++) {
-				if (token_arr[i] == NULL) {
-					break;
-				}
-				if (strcmp(token_arr[i], "..") == 0) {
-					// go back
-					int last = lastIndexOf(cwd, '/');
-					int pos = strlen(cwd) - last; 
-					pos = strlen(cwd) - pos;
-					char *temp = getcwd(cwd, sizeof(cwd));
-					strncpy(new_dir, temp, pos);
-					chdir(new_dir);
-				}	
-				else {
-				   // go the the dir
-				   // check if dir exits
-				}	
-				getcwd(new_dir, sizeof(cwd));
-				//strncpy(cwd, new_dir, sizeof(new_dir));
-				//i++;
-			}
-		}
-	}
-}
-*/
-
-int lastIndexOf(const char *str, const char toFind) {
-	int index = -1;
-	int i = 0;
-	while(str[i] != '\0') {
-		if (str[i] == toFind) {
-			index = i;
-		}
-		i++;
-	}	
-	return index;
-}
-
+/* 
+ * Determines if command is built in to ttsh.c
+ * If so, this executes the command
+ *
+ * @param argv Command line arguments
+ * @return 0 if not
+ * @return 1 if it is 
+ */
 int isBuiltIn(char *argv[]) {
 	if (strcmp(argv[0], "exit") == 0) {
 		fprintf(stdout, "adios...\n");
@@ -197,6 +155,9 @@ int isBuiltIn(char *argv[]) {
 
 /*
  * Execute commands in argv
+ *
+ * @param argv Command line arguments
+ * @param ret Determines if command to run foreground or bakckground
 */
 
 void execCmd(char *argv[], int ret) {
@@ -205,7 +166,7 @@ void execCmd(char *argv[], int ret) {
 	if ((child_pid = Fork()) == 0) { // Child runs this
 		setpgid(0, 0);
 		if (execvp(argv[0], argv) == -1) {
-			fprintf(stdout, "command no es aqui\n");
+			fprintf(stdout, "ERROR: command not found\n");
 			exit(0);
 		}
 	}
@@ -226,6 +187,7 @@ void unix_error(char *msg) {
 }
 
 /*
+ * Error handling for the fork() method
  */
 pid_t Fork(void) {
 	pid_t pid;
