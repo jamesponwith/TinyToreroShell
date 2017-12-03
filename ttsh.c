@@ -149,7 +149,7 @@ void nextDir(char *argv[]) {
 	new_cwd = strcat(cwd, "/");
 	new_cwd = strcat(new_cwd, argv[1]);
 	if(chdir(new_cwd) == -1) {
-		fprintf(stdout, "directory does not exist");
+		fprintf(stdout, "directory does not exist\n");
 	}
 	return;
 }
