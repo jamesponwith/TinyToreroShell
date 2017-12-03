@@ -24,15 +24,15 @@
 #include "parse_args.h"
 #include "history_queue.h"
 
-void execCmd(char *argv[], int ret); 
-void cd(char *argv[]); 
-void unix_error(char*msg);
-pid_t Fork(void); 
-void child_handler(__attribute__ ((unused)) int sig);
+int shellEntry(char cmdline[MAXLINE]); 
 int isBuiltIn(char *argv[]); 
 void isBangNum(char cmd[MAXLINE]);
+void cd(char *argv[]); 
 void nextDir(char *argv[]); 
-int shellEntry(char cmdline[MAXLINE]); 
+void execCmd(char *argv[], int ret); 
+pid_t Fork(void); 
+void unix_error(char*msg);
+void child_handler(__attribute__ ((unused)) int sig);
 
 int main() { 
 	struct sigaction sa;
@@ -78,6 +78,30 @@ int shellEntry(char cmdline[MAXLINE]) {
 }
 
 /* 
+ * Determines if command is built in to ttsh.c
+ * If so, this executes the command
+ *
+ * @param argv Command line arguments
+ * @return 0 if not
+ * @return 1 if it is 
+ */
+int isBuiltIn(char *argv[]) {
+	if (strcmp(argv[0], "exit") == 0) {
+		fprintf(stdout, "adios...\n");
+		exit(0);
+	}
+	else if (strcmp(argv[0], "history") == 0) {
+		printHistory();
+		return 1;
+	}
+	else if (strcmp(argv[0], "cd") == 0) {
+		cd(argv);
+		return 1;
+	}
+	return 0;
+}
+
+/* 
  * Determines if the command is of the format !num
  *
  * @param *cmd argv[1]
@@ -89,23 +113,6 @@ void isBangNum(char *cmd) {
 	}
 }
 
-/*
- * Changes cwd to the dir specified by argv[1]
- *
- * @param argv Command line arguments
- */
-void nextDir(char *argv[]) {
-	char *new_cwd = NULL;
-	char cwd[MAXLINE];
-	getcwd(cwd, sizeof(cwd));
-
-	new_cwd = strcat(cwd, "/");
-	new_cwd = strcat(new_cwd, argv[1]);
-	if(chdir(new_cwd) == -1) {
-		fprintf(stdout, "directory does not exist");
-	}
-	return;
-}
 
 /*
  * Functionality for the cd command
@@ -128,29 +135,22 @@ void cd(char *argv[]) {
 		return;
 	}
 }
-
-/* 
- * Determines if command is built in to ttsh.c
- * If so, this executes the command
+/*
+ * Changes cwd to the dir specified by argv[1]
  *
  * @param argv Command line arguments
- * @return 0 if not
- * @return 1 if it is 
  */
-int isBuiltIn(char *argv[]) {
-	if (strcmp(argv[0], "exit") == 0) {
-		fprintf(stdout, "adios...\n");
-		exit(0);
+void nextDir(char *argv[]) {
+	char *new_cwd = NULL;
+	char cwd[MAXLINE];
+	getcwd(cwd, sizeof(cwd));
+
+	new_cwd = strcat(cwd, "/");
+	new_cwd = strcat(new_cwd, argv[1]);
+	if(chdir(new_cwd) == -1) {
+		fprintf(stdout, "directory does not exist");
 	}
-	else if (strcmp(argv[0], "history") == 0) {
-		printHistory();
-		return 1;
-	}
-	else if (strcmp(argv[0], "cd") == 0) {
-		cd(argv);
-		return 1;
-	}
-	return 0;
+	return;
 }
 
 /*
