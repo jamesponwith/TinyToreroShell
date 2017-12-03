@@ -135,6 +135,7 @@ void cd(char *argv[]) {
 		return;
 	}
 }
+
 /*
  * Changes cwd to the dir specified by argv[1]
  *
@@ -159,7 +160,6 @@ void nextDir(char *argv[]) {
  * @param argv Command line arguments
  * @param ret Determines if command to run foreground or bakckground
 */
-
 void execCmd(char *argv[], int ret) {
 	int status;
 	pid_t child_pid; 		
