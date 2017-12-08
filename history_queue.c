@@ -22,13 +22,16 @@ static int cmd_count = 0;
  * Enables the '!num' syntax to execute
  * a command by the command number
  */
-void numToCmd(char *cmd) {
+//TODO: switch to int, return 1 if add to history
+int numToCmd(char *cmd) {
 	unsigned int cmd_index = atoi(cmd);
 	for (int i = 0; i < MAXHIST; i++) { 
 		if (cmd_index == history[i].cmd_num) {
 			strcpy(cmd, history[i].cmdline);
+			return 1;
 		}
 	}
+	return 0;
 }
 
 /*

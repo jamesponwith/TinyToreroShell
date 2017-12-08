@@ -29,7 +29,7 @@ void cd(char *argv[]);
 void unix_error(char*msg);
 void nextDir(char *argv[]); 
 int isBuiltIn(char *argv[]); 
-void isBangNum(char cmd[MAXLINE]);
+int isBangNum(char cmd[MAXLINE]);
 int shellEntry(char cmdline[MAXLINE]); 
 void execCmd(char *argv[], int ret); 
 void child_handler(__attribute__ ((unused)) int sig);
@@ -70,12 +70,20 @@ int main() {
  */
 int shellEntry(char cmdline[MAXLINE]) {
 	char *argv[MAXARGS];
-	isBangNum(cmdline);
+	int add	 = isBangNum(cmdline);
+	if (add == 0) {
+		fprintf(stdout, "ERROR, command not in history\n");
+		return 0;
+	}
+
 	int ret = parseArguments(cmdline, argv);
 	if (argv[0] == NULL) {
 		return 1; 
 	}
-	addEntry(cmdline);	
+	if (add == 1) {
+		addEntry(cmdline);	
+	}
+	// else break
 	if (isBuiltIn(argv) == 1) {
 		return 1;
 	}
@@ -110,12 +118,16 @@ int isBuiltIn(char *argv[]) {
 /* 
  * Determines if the command is of the format !num
  * @param *cmd argv[1]
+ * @return ret 1 if command is in history
+ * 			   0 if not
  */
-void isBangNum(char *cmd) {
+int isBangNum(char *cmd) {
+	int ret = 1;
 	if (cmd[0] == '!') {
 		memmove(cmd, cmd+1, strlen(cmd));
-		numToCmd(cmd);
+		ret = numToCmd(cmd);
 	}
+	return ret;
 }
 
 
