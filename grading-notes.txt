@@ -1,0 +1,15 @@
+Authors:
+    43	Patrick Hall
+    17	James Ponwith
+
+The following requirements were not met:
+- Correctly reap all foreground and background processes after they finish
+  executing (i.e. produce no zombies).
+- Have a correct implementation of the built-in cd command that changes the
+  current working directory.
+
+Grading Notes:
+- Program has zombies: Did two consecutive siestas in background and this
+results in zombies
+- cd /home/sat/public does not work
+- Very nicely structured code.
