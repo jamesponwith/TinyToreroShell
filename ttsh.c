@@ -11,15 +11,15 @@
 
 #define _XOPEN_SOURCE 600
 
+#include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <unistd.h>
-#include <ctype.h>
-#include <sys/types.h> 
-#include <sys/wait.h>
-#include <sys/errno.h>
 #include <libgen.h>
+#include <sys/wait.h>
+#include <sys/types.h> 
+#include <sys/errno.h>
 
 #include "parse_args.h"
 #include "history_queue.h"
