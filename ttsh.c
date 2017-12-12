@@ -141,7 +141,8 @@ void cd(char *argv[]) {
 		return;
 	}
 	else if (strcmp(argv[1], "..") != 0) {
-		nextDir(argv);
+		chdir(argv[1]);
+		//nextDir(argv);
 		return;
 	}
 	else {
