@@ -1,4 +1,4 @@
-COMP 280 - Project 06 (Tiny Torero Shell)
+COMP 280 - Project 07 (Tiny Torero Shell)
 
 1. Authors: James Ponwith and Patrick Hall
 
@@ -10,3 +10,6 @@ COMP 280 - Project 06 (Tiny Torero Shell)
 
 5. (Optional) Additional Comments: This project was extremely interesting and
 very satisfying upon completion. 
+
+The zombie reaping takes a little time. It's because we are using a double-
+barrel shotgun and are not very fast at reloading. 

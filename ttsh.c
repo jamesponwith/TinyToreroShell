@@ -140,17 +140,10 @@ void cd(char *argv[]) {
 		chdir(getenv("HOME"));
 		return;
 	}
-	else if (strcmp(argv[1], "..") != 0) {
-		chdir(argv[1]);
-		//nextDir(argv);
-		return;
+	else if (chdir(argv[1]) == -1) {
+		fprintf(stdout, "directory does not exist\n");
 	}
-	else {
-		char cwd[MAXLINE];
-		getcwd(cwd, sizeof(cwd));
-		chdir(dirname(cwd));
-		return;
-	}
+	return;
 }
 
 /*
